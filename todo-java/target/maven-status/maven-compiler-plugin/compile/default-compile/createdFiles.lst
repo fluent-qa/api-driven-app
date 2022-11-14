@@ -1,0 +1,14 @@
+io/fluentqa/todo/model/Todo.class
+io/fluentqa/todo/configuration/SpringDocConfiguration.class
+io/fluentqa/todo/configuration/HomeController.class
+io/fluentqa/todo/model/Todo$StateEnum.class
+io/fluentqa/todo/api/ReadyApi.class
+io/fluentqa/todo/OpenApiGeneratorApplication.class
+io/fluentqa/todo/api/HealthyApi.class
+io/fluentqa/todo/api/V1ApiController.class
+io/fluentqa/todo/model/Error.class
+io/fluentqa/todo/api/V1Api.class
+io/fluentqa/todo/RFC3339DateFormat.class
+io/fluentqa/todo/api/ApiUtil.class
+io/fluentqa/todo/api/HealthyApiController.class
+io/fluentqa/todo/api/ReadyApiController.class

@@ -1,0 +1,332 @@
+openapi: 3.0.2
+info:
+  description: Documentation of a simple Todos API
+  title: Todos API
+  version: 0.0.2
+servers:
+- description: Production
+  url: https://test-api.temp.com
+- description: Development server
+  url: localhost
+tags:
+- description: Todo related end-points
+  name: todo
+- description: Tag related end-points
+  name: tag
+- description: Tag for internal healthcheck routes
+  name: healthcheck
+paths:
+  /v1/todos:
+    get:
+      description: List all the todos of the user provided in the query parameters
+      operationId: listTodos
+      parameters:
+      - explode: true
+        in: query
+        name: ownerUuid
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              examples: {}
+              schema:
+                items:
+                  $ref: '#/components/schemas/Todo'
+                type: array
+          description: Successfully retrieved all the todos
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request badly formatted
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Too many requests were sent
+      summary: List all the todos
+      tags:
+      - todo
+      x-accepts: application/json
+      x-tags:
+      - tag: todo
+    post:
+      description: Create a new todo
+      operationId: createTodo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+        description: New todo payload
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+          description: Successfully created a new todo
+          links:
+            GetTodoByUuid:
+              $ref: '#/components/links/GetTodoByUuid'
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request badly formatted
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Too many requests were sent
+      summary: Create a new todo
+      tags:
+      - todo
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: todo
+  /v1/todos/{todoUuid}:
+    delete:
+      description: Delete a todo by providing its uuid
+      operationId: deleteTodo
+      parameters:
+      - explode: false
+        in: path
+        name: todoUuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: ownerUuid
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: |
+          Defines if the deletion is a "hard" delete (true) or a "soft" delete (false or not present)
+        explode: true
+        in: query
+        name: hard
+        required: false
+        schema:
+          type: boolean
+        style: form
+      responses:
+        "204":
+          description: Successful response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request badly formatted
+      summary: Delete a todo
+      tags:
+      - todo
+      x-accepts: application/json
+      x-tags:
+      - tag: todo
+    get:
+      description: Get a todo by providing its uuid
+      operationId: getTodo
+      parameters:
+      - explode: true
+        in: query
+        name: ownerUuid
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: todoUuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+          description: Successfully retrieved the todo
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request badly formatted
+        "404":
+          description: Couldn't find the todo with the provided uuid
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Too many requests were sent
+      summary: Get a todo
+      tags:
+      - todo
+      x-accepts: application/json
+      x-tags:
+      - tag: todo
+    put:
+      description: Update a todo by providing its uuid and the updated todo content
+      operationId: updateTodo
+      parameters:
+      - explode: true
+        in: query
+        name: ownerUuid
+        required: true
+        schema:
+          type: string
+        style: form
+      - explode: false
+        in: path
+        name: todoUuid
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Todo'
+        description: New todo payload
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+          description: Successful response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request badly formatted
+        "429":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Too many requests were sent
+      summary: Update a todo
+      tags:
+      - todo
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: todo
+  /ready:
+    get:
+      operationId: isReady
+      responses:
+        "200":
+          description: Service is ready
+        "503":
+          description: Service isn't ready yet
+      summary: Get the readiness of the service
+      tags:
+      - healthcheck
+      x-accepts: application/json
+      x-tags:
+      - tag: healthcheck
+  /healthy:
+    get:
+      operationId: isHealthy
+      responses:
+        "200":
+          description: Service is healthy
+        "503":
+          description: Service isn't healthy
+      summary: Get the healthiness of the service
+      tags:
+      - healthcheck
+      x-accepts: application/json
+      x-tags:
+      - tag: healthcheck
+components:
+  links:
+    GetTodoByUuid:
+      description: |
+        The `uuid` value returned in the response can be used as the `todoUuid` parameter in `GET /todos/{todoUuid}`.
+      operationId: getTodo
+      parameters:
+        todoUuid: $response.body#/uuid
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Request badly formatted
+    RateLimited:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Too many requests were sent
+  schemas:
+    Todo:
+      example:
+        uuid: 3d780d09-c520-4817-b430-ce849bcc5423
+        ownerUuid: 535d6711-2ec0-4ba7-9f34-3d13f25de822
+        title: Groceries
+        state: ACTIVE
+      properties:
+        uuid:
+          description: Unique identifier of the todo
+          type: string
+        ownerUuid:
+          description: Unique identifier of the owner of the todo
+          type: string
+        title:
+          description: Title/short summary of the todo
+          type: string
+        state:
+          description: State of the todo
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - DELETED
+          type: string
+        description:
+          description: The lengthy description of this todo
+          type: string
+      required:
+      - ownerUuid
+      - state
+      - title
+      - uuid
+      type: object
+    Error:
+      example:
+        statusCode: 400
+        error: Bad Request
+        message: querystring must have required property 'ownerUuid'
+      properties:
+        statusCode:
+          description: Status code of the response
+          type: number
+        error:
+          description: Name of the error
+          type: string
+        message:
+          description: Explanation of the error
+          type: string
+      type: object

@@ -1,0 +1,14 @@
+{
+  "frontendFolder": "/Users/patrick/workspace/personal/qdriven/daily-qa/dailyqa-revisited/knwo-how/api-driven-app/todo-java/./frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/Users/patrick/workspace/personal/qdriven/daily-qa/dailyqa-revisited/knwo-how/api-driven-app/todo-java/target/flow-frontend",
+  "staticOutput": "/Users/patrick/workspace/personal/qdriven/daily-qa/dailyqa-revisited/knwo-how/api-driven-app/todo-java/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "frontendBundleOutput": "/Users/patrick/workspace/personal/qdriven/daily-qa/dailyqa-revisited/knwo-how/api-driven-app/todo-java/target/classes/META-INF/VAADIN/webapp",
+  "addonFrontendFolder": "target/flow-frontend/",
+  "themeName": "",
+  "clientServiceWorkerSource": "/Users/patrick/workspace/personal/qdriven/daily-qa/dailyqa-revisited/knwo-how/api-driven-app/todo-java/target/sw.ts",
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
+}
